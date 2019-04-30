@@ -1,0 +1,40 @@
+version: '3.3'
+
+services:
+
+  nginx:
+    build:
+      context: ./nginx
+    image: gkernel-skeleton/nginx:latest
+    container_name: gkernel-skeleton-nginx
+    volumes:
+      - ./nginx/vhosts/vhosts.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/vhosts/log_format.conf:/etc/nginx/conf.d/1_log_format.conf
+      - ./nginx/vhosts/common_locations:/etc/nginx/common_locations
+      - ./nginx/supervisor.conf:/etc/supervisor.d/app.ini
+      - ./nginx/crontab:/provision/cron/crontab
+      - ./nginx/logrotate_nginx.conf:/provision/logrotate_nginx.conf
+      - ./nginx/provision.sh:/provision/provision.sh
+      - ./volumes/nginx:/var/log/nginx
+      - ../static:/static
+    ports:
+      - "50080:80"
+    networks:
+      - gkernel_skeleton
+
+  redis:
+    image: redis:5.0-alpine
+    container_name: microsites-go-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - ./volumes/redis:/data
+    ports:
+      - "56379:6379"
+    networks:
+      - gkernel_skeleton
+
+networks:
+  gkernel_skeleton:
+    driver: bridge
+    ipam:
+      driver: default

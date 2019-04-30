@@ -1,0 +1,88 @@
+http_port: 8081
+app_env: development
+templates_path: templates
+
+
+services:
+
+  UserProvider:
+    arguments: []
+
+  AuthService:
+    arguments: ["@UserProvider", "/login", "/"]
+
+  CsrfGuard:
+    arguments: []
+
+  RequestLoggerSetter:
+    arguments: ["./storage/logs/logs.json"]
+
+  SessionsRedisConnection:
+    arguments: ["localhost:56379", "", 0, 0, 0, 300]
+
+  Sessions:
+    arguments: ["sid", "@SessionsRedisConnection"]
+
+  SessionsMiddleware:
+    arguments: ["@Sessions"]
+
+  # Controllers:
+
+  IndexController:
+    arguments: []
+
+routing:
+
+  routes:
+
+    IndexController:index:
+      url: "/"
+      methods: ["GET"]
+      controller: "IndexController:Index"
+
+    IndexController:privatePage:
+      url: "/private-page"
+      methods: ["GET"]
+      controller: "IndexController:PrivatePage"
+      event_listeners:
+        - {event: kernelEvent.RequestReceived, listener: "AuthService:RedirectToLoginIfNotAuthenticated", priority: 41}
+
+    IndexController:loginPage:
+      url: "/login"
+      methods: ["GET"]
+      controller: "IndexController:LoginPage"
+      event_listeners:
+        - {event: kernelEvent.RequestReceived, listener: "AuthService:RedirectIfAuthenticated", priority: 41}
+
+    IndexController:performLogin:
+      url: "/login-perform"
+      methods: ["POST"]
+      controller: "IndexController:PerformLoginLogout"
+      event_listeners:
+        - {event: kernelEvent.RequestReceived, listener: "AuthService:RedirectIfAuthenticated", priority: 41}
+        - {event: kernelEvent.RequestReceived, listener: "AuthService:AuthenticateByLogPass", priority: 42}
+
+    IndexController:performLogout:
+      url: "/logout"
+      methods: ["GET"]
+      controller: "IndexController:PerformLoginLogout"
+      event_listeners:
+        - {event: kernelEvent.RequestReceived, listener: "AuthService:LogOut", priority: 39}
+
+  # Request level event listeners common for all routes
+  event_listeners:
+    - {event: kernelEvent.RequestReceived, listener: "RequestLoggerSetter:CreateLogger", priority: 15}
+    - {event: kernelEvent.RequestReceived, listener: "SessionsMiddleware:RequestSessionStart", priority: 20}
+    - {event: kernelEvent.RequestReceived, listener: "CsrfGuard:Set", priority: 30}
+    - {event: kernelEvent.RequestReceived, listener: "CsrfGuard:Check", priority: 35}
+    - {event: kernelEvent.RequestReceived, listener: "AuthService:AuthenticateBySession", priority: 40}
+    - {event: kernelEvent.ResponseBeforeSend, listener: "SessionsMiddleware:RequestSessionAddResponseHeader", priority: 20}
+    - {event: kernelEvent.RequestTermination, listener: "RequestLoggerSetter:CloseLogger", priority: 100}
+
+# Application level event listeners
+event_listeners:
+  - {event: kernelEvent.ApplicationLaunched, listener: "SessionsMiddleware:InitRedisConnection", priority: 10}
+  - {event: kernelEvent.ApplicationTermination, listener: "SessionsMiddleware:CloseRedisConnection", priority: 10}
+
+parameters:
+  # no parameters yet
