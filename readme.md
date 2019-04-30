@@ -1,0 +1,1 @@
+Golang web application skeleton based on [bassbeaver/gkernel](https://github.com/bassbeaver/gkernel) framework.
