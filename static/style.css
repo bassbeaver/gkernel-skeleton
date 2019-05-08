@@ -1,3 +1,7 @@
 .navbar {
     margin-bottom: 2em;
 }
+
+.bold {
+    font-weight: 700;
+}

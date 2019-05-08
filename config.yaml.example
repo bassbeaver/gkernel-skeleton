@@ -40,6 +40,11 @@ routing:
       methods: ["GET"]
       controller: "IndexController:Index"
 
+    IndexController:pageWithParam:
+      url: "/page-with-param/:parameterValue"
+      methods: ["GET"]
+      controller: "IndexController:PageWithParam"
+
     IndexController:privatePage:
       url: "/private-page"
       methods: ["GET"]

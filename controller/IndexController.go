@@ -44,6 +44,32 @@ func (c *IndexController) Index(request *http.Request) kernelResponse.Response {
 	return response
 }
 
+func (c *IndexController) PageWithParam(request *http.Request) kernelResponse.Response {
+	var viewData struct {
+		CsrfToken string
+		User      auth.UserInterface
+		Header    struct {
+			Title string
+		}
+		H1    string
+		Param string
+	}
+
+	viewData.Header.Title = "gkernel skeleton site"
+	viewData.H1 = "This is page with URL parameter"
+	viewData.CsrfToken = csrfService.GetTokenFromRequestContext(request)
+	if auth.GetUser(request) != nil {
+		viewData.User = auth.GetUser(request).(*user_provider.UserStub)
+	}
+
+	viewData.Param = request.URL.Query().Get(":parameterValue")
+
+	response := kernelResponse.NewViewResponse("index/page-with-param.gohtml")
+	response.SetData(viewData)
+
+	return response
+}
+
 func (c *IndexController) PrivatePage(request *http.Request) kernelResponse.Response {
 	var viewData struct {
 		CsrfToken string
