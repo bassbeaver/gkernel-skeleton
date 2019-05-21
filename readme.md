@@ -9,3 +9,5 @@ How to start application:
 1. Copy `config.yaml.example` to `config.yaml`
 2. Run `docker-compose up -d` from `./docker` folder.
 3. Build and run Go application. Application will be available on http://localhost:50080
+
+More detailed documentation: [https://bassbeaver.github.io/gkernel-docs/](https://bassbeaver.github.io/gkernel-docs/)
