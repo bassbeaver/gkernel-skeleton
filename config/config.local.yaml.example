@@ -1,0 +1,8 @@
+parameters:
+
+  redis.address: "localhost:56379"
+  redis.password: ""
+  redis.database: 0
+  redis.maxidle: 0
+  redis.maxactive: 0
+  redis.idletimeout: 300

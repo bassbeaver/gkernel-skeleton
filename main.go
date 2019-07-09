@@ -11,6 +11,7 @@ import (
 	requestLoggerService "gkernel-skeleton/service/request_logger"
 	sessionService "gkernel-skeleton/service/session"
 	userProvider "gkernel-skeleton/service/user_provider"
+	"html/template"
 	"net/http"
 	"net/http/pprof"
 	"os"
@@ -33,7 +34,7 @@ func main() {
 			fmt.Println("Failed to determine path to own binary file")
 			panic(curBinDirError)
 		}
-		configPath = curBinDir + "/config.yaml"
+		configPath = curBinDir + "/config"
 	} else {
 		configPath = *configPathFlag
 	}
@@ -65,6 +66,24 @@ func main() {
 	csrfService.Register(kernelObj)
 	requestLoggerService.Register(kernelObj)
 	sessionService.Register(kernelObj)
+
+	//******************************** Custom templates functions registration ********************************
+	kernelObj.GetTemplates().Funcs(template.FuncMap{
+		"sequence": func(size int) []int {
+			sequence := make([]int, size)
+			for i := 0; i < size; i++ {
+				sequence[i] = i
+			}
+
+			return sequence
+		},
+		"addInt": func(a, b int) int {
+			return a + b
+		},
+		"subInt": func(a, b int) int {
+			return a - b
+		},
+	})
 
 	//************** Profiler (pprof) configuration **************
 	if *profilingFlag {

@@ -2,7 +2,7 @@ module gkernel-skeleton
 
 require (
 	github.com/ajg/form v1.5.1 // indirect
-	github.com/bassbeaver/gkernel v0.2.0-alpha
+	github.com/bassbeaver/gkernel v0.1.0
 	github.com/bassbeaver/logopher v0.4.0-alpha
 	github.com/gavv/monotime v0.0.0-20190418164738-30dba4353424 // indirect
 	github.com/imdario/mergo v0.3.7 // indirect
