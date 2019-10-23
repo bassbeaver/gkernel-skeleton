@@ -9,6 +9,7 @@ import (
 	authService "gkernel-skeleton/service/auth"
 	csrfService "gkernel-skeleton/service/csrf"
 	requestLoggerService "gkernel-skeleton/service/request_logger"
+	requestSizeValidatorService "gkernel-skeleton/service/request_size_validator"
 	sessionService "gkernel-skeleton/service/session"
 	userProvider "gkernel-skeleton/service/user_provider"
 	"html/template"
@@ -64,6 +65,7 @@ func main() {
 	authService.Register(kernelObj)
 	userProvider.Register(kernelObj)
 	csrfService.Register(kernelObj)
+	requestSizeValidatorService.Register(kernelObj)
 	requestLoggerService.Register(kernelObj)
 	sessionService.Register(kernelObj)
 

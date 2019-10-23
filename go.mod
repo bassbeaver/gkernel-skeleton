@@ -2,8 +2,8 @@ module gkernel-skeleton
 
 require (
 	github.com/ajg/form v1.5.1 // indirect
-	github.com/bassbeaver/gkernel v0.1.0
-	github.com/bassbeaver/logopher v0.4.0-alpha
+	github.com/bassbeaver/gkernel v0.3.0
+	github.com/bassbeaver/logopher v0.1.0
 	github.com/gavv/monotime v0.0.0-20190418164738-30dba4353424 // indirect
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
@@ -26,5 +26,4 @@ require (
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2 // indirect
 	gopkg.in/kataras/go-serializer.v0 v0.0.4 // indirect
-	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce // indirect
 )

@@ -14,6 +14,9 @@ services:
   CsrfGuard:
     arguments: []
 
+  RequestSizeValidator:
+    arguments: []
+
   RequestLoggerSetter:
     arguments: ["./storage/logs/logs.json"]
 
@@ -78,8 +81,9 @@ routing:
   event_listeners:
     - {event: kernelEvent.RequestReceived, listener: "RequestLoggerSetter:CreateLogger", priority: 15}
     - {event: kernelEvent.RequestReceived, listener: "SessionsMiddleware:RequestSessionStart", priority: 20}
-    - {event: kernelEvent.RequestReceived, listener: "CsrfGuard:Set", priority: 30}
-    - {event: kernelEvent.RequestReceived, listener: "CsrfGuard:Check", priority: 35}
+    - {event: kernelEvent.RequestReceived, listener: "RequestSizeValidator:ValidateBodySize", priority: 30}
+    - {event: kernelEvent.RequestReceived, listener: "CsrfGuard:Set", priority: 31}
+    - {event: kernelEvent.RequestReceived, listener: "CsrfGuard:Check", priority: 32}
     - {event: kernelEvent.RequestReceived, listener: "AuthService:AuthenticateBySession", priority: 40}
     - {event: kernelEvent.ResponseBeforeSend, listener: "SessionsMiddleware:RequestSessionAddResponseHeader", priority: 20}
     - {event: kernelEvent.RequestTermination, listener: "RequestLoggerSetter:CloseLogger", priority: 100}

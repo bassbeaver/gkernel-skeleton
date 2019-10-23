@@ -9,6 +9,10 @@ github.com/bassbeaver/gkernel v0.1.0 h1:Eh2MIqhR5rSyKXENfumEoCO7/w2AUHlj88+961TM
 github.com/bassbeaver/gkernel v0.1.0/go.mod h1:OOUzeZiN4q9C7GBZu6mLEP6uSEpGHMUiCVQZCsANZkk=
 github.com/bassbeaver/gkernel v0.2.0-alpha h1:oQEssg4yaU/LPQSb8qD+ijx6eVPtG6a1o050G1OJQIQ=
 github.com/bassbeaver/gkernel v0.2.0-alpha/go.mod h1:OOUzeZiN4q9C7GBZu6mLEP6uSEpGHMUiCVQZCsANZkk=
+github.com/bassbeaver/gkernel v0.3.0 h1:1VdMdaWOzL4ax7/Lj7cOo0BWCNHPUpkeWrFbcdVIo9c=
+github.com/bassbeaver/gkernel v0.3.0/go.mod h1:OOUzeZiN4q9C7GBZu6mLEP6uSEpGHMUiCVQZCsANZkk=
+github.com/bassbeaver/logopher v0.1.0 h1:qLRV8LMyHxucjCuUB8D5hLtKYmguYQ79dU45dnqX52w=
+github.com/bassbeaver/logopher v0.1.0/go.mod h1:tYelFdWY3Dwdf5MUsfxvxAeoRe/OB+SQiOV2p7a04nc=
 github.com/bassbeaver/logopher v0.4.0-alpha h1:N0Km70BAlFmeaZrVF9P/KL/rLXc0L3+OCkp91ktTyow=
 github.com/bassbeaver/logopher v0.4.0-alpha/go.mod h1:d+zk7rrbQhRVjWdqfya885nZ2lwTYVg0yNvejxy3kC4=
 github.com/coreos/etcd v3.3.10+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=
