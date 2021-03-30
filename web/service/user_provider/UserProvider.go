@@ -2,8 +2,8 @@ package user_provider
 
 import (
 	"fmt"
-	"github.com/bassbeaver/gkernel"
-	"gkernel-skeleton/service/auth"
+	webKernel "github.com/bassbeaver/gkernel/web"
+	"gkernel-skeleton/web/service/auth"
 )
 
 const (
@@ -46,20 +46,9 @@ func newUserProvider() *UserProvider {
 	return &UserProvider{}
 }
 
-func Register(kernelObj *gkernel.Kernel) {
+func Register(kernelObj *webKernel.Kernel) {
 	err := kernelObj.RegisterService(MiddlewareServiceAlias, newUserProvider, true)
 	if nil != err {
 		panic(fmt.Sprintf("failed to register %s service, error: %s", MiddlewareServiceAlias, err.Error()))
 	}
-}
-
-//--------------------
-
-type UserStub struct {
-	Id    string
-	Login string
-}
-
-func (us *UserStub) GetId() string {
-	return us.Id
 }

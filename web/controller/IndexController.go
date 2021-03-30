@@ -1,12 +1,18 @@
 package controller
 
 import (
-	kernelResponse "github.com/bassbeaver/gkernel/response"
+	"fmt"
+	webKernel "github.com/bassbeaver/gkernel/web"
+	kernelResponse "github.com/bassbeaver/gkernel/web/response"
 	"github.com/bassbeaver/logopher"
-	"gkernel-skeleton/service/auth"
-	csrfService "gkernel-skeleton/service/csrf"
-	"gkernel-skeleton/service/user_provider"
+	"gkernel-skeleton/web/service/auth"
+	csrfService "gkernel-skeleton/web/service/csrf"
+	"gkernel-skeleton/web/service/user_provider"
 	"net/http"
+)
+
+const (
+	indexControllerServiceAlias = "IndexController"
 )
 
 type IndexController struct {
@@ -130,10 +136,23 @@ func (c *IndexController) LoginPage(request *http.Request) kernelResponse.Respon
 }
 
 // Technical action that should not be reached by request, as it should be intercepted with auth middleware
-func (c *IndexController) PerformLoginLogout(request *http.Request) kernelResponse.Response {
+func (c *IndexController) PerformLoginLogout(_ *http.Request) kernelResponse.Response {
 	response := kernelResponse.NewBytesResponse()
 	response.SetHttpStatus(http.StatusBadRequest)
 	response.Body.Write([]byte("You should not see this. Run for your life."))
 
 	return response
+}
+
+//--------------------
+
+func newIndexController() *IndexController {
+	return &IndexController{}
+}
+
+func RegisterIndex(kernelObj *webKernel.Kernel) {
+	err := kernelObj.RegisterService(indexControllerServiceAlias, newIndexController, true)
+	if nil != err {
+		panic(fmt.Sprintf("failed to register "+indexControllerServiceAlias+" service, error: %s", err.Error()))
+	}
 }

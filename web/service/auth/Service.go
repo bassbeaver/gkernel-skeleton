@@ -2,12 +2,12 @@ package auth
 
 import (
 	"fmt"
-	"github.com/bassbeaver/gkernel"
-	"github.com/bassbeaver/gkernel/event_bus/event"
-	"github.com/bassbeaver/gkernel/response"
-	"github.com/kataras/go-sessions"
-	loggerService "gkernel-skeleton/service/request_logger"
-	sessionService "gkernel-skeleton/service/session"
+	webKernel "github.com/bassbeaver/gkernel/web"
+	"github.com/bassbeaver/gkernel/web/event_bus/event"
+	"github.com/bassbeaver/gkernel/web/response"
+	"github.com/kataras/go-sessions/v3"
+	loggerService "gkernel-skeleton/web/service/request_logger"
+	sessionService "gkernel-skeleton/web/service/session"
 	"net/http"
 )
 
@@ -133,7 +133,7 @@ func newAuthService(userLoader UserProvider, loginPageUrl, ifAlreadyAuthenticate
 	}
 }
 
-func Register(kernelObj *gkernel.Kernel) {
+func Register(kernelObj *webKernel.Kernel) {
 	err := kernelObj.RegisterService(MiddlewareServiceAlias, newAuthService, true)
 	if nil != err {
 		panic(fmt.Sprintf("failed to register %s service, error: %s", MiddlewareServiceAlias, err.Error()))

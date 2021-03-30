@@ -4,18 +4,18 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"fmt"
-	"github.com/bassbeaver/gkernel"
-	"github.com/bassbeaver/gkernel/event_bus/event"
-	"github.com/bassbeaver/gkernel/response"
-	sessionService "gkernel-skeleton/service/session"
+	webKernel "github.com/bassbeaver/gkernel/web"
+	"github.com/bassbeaver/gkernel/web/event_bus/event"
+	"github.com/bassbeaver/gkernel/web/response"
+	sessionService "gkernel-skeleton/web/service/session"
 	"net/http"
 	"strconv"
 )
 
 const (
-	MiddlewareServiceAlias = "CsrfGuard"
-	TokenSessionKey        = "csrf_token"
-	FormInputName          = "csrf_token"
+	middlewareServiceAlias = "CsrfGuard"
+	tokenSessionKey        = "csrf_token"
+	formInputName          = "csrf_token"
 )
 
 type Guard struct{}
@@ -23,7 +23,7 @@ type Guard struct{}
 func (g *Guard) Set(eventObj *event.RequestReceived) {
 	sessionObj := sessionService.GetFromRequestContext(eventObj.GetRequest())
 
-	csrfToken := sessionObj.GetString(TokenSessionKey)
+	csrfToken := sessionObj.GetString(tokenSessionKey)
 	if "" != csrfToken {
 		return
 	}
@@ -37,7 +37,7 @@ func (g *Guard) Set(eventObj *event.RequestReceived) {
 	csrfTokenBytes := sha256.Sum256(randomBytes)
 	csrfToken = fmt.Sprintf("%x", csrfTokenBytes)
 
-	sessionObj.Set(TokenSessionKey, csrfToken)
+	sessionObj.Set(tokenSessionKey, csrfToken)
 }
 
 func (g *Guard) Check(eventObj *event.RequestReceived) {
@@ -61,7 +61,7 @@ func (g *Guard) Check(eventObj *event.RequestReceived) {
 		return
 	}
 
-	formToken := request.PostFormValue(FormInputName)
+	formToken := request.PostFormValue(formInputName)
 	sessionToken := GetTokenFromRequestContext(request)
 	if formToken != sessionToken {
 		errorResponse := response.NewViewResponse("error/bad_request.gohtml")
@@ -79,12 +79,12 @@ func newCsrfGuard() *Guard {
 }
 
 func GetTokenFromRequestContext(request *http.Request) string {
-	return sessionService.GetFromRequestContext(request).GetString(TokenSessionKey)
+	return sessionService.GetFromRequestContext(request).GetString(tokenSessionKey)
 }
 
-func Register(kernelObj *gkernel.Kernel) {
-	err := kernelObj.RegisterService(MiddlewareServiceAlias, newCsrfGuard, true)
+func Register(kernelObj *webKernel.Kernel) {
+	err := kernelObj.RegisterService(middlewareServiceAlias, newCsrfGuard, true)
 	if nil != err {
-		panic(fmt.Sprintf("failed to register %s service, error: %s", MiddlewareServiceAlias, err.Error()))
+		panic(fmt.Sprintf("failed to register %s service, error: %s", middlewareServiceAlias, err.Error()))
 	}
 }

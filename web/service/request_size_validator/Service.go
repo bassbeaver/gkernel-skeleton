@@ -2,9 +2,9 @@ package request_size_validator
 
 import (
 	"fmt"
-	"github.com/bassbeaver/gkernel"
-	"github.com/bassbeaver/gkernel/event_bus/event"
-	"github.com/bassbeaver/gkernel/response"
+	webKernel "github.com/bassbeaver/gkernel/web"
+	webEvent "github.com/bassbeaver/gkernel/web/event_bus/event"
+	"github.com/bassbeaver/gkernel/web/response"
 	"net/http"
 	"strconv"
 	"strings"
@@ -18,7 +18,7 @@ const (
 
 type Validator struct{}
 
-func (g *Validator) ValidateBodySize(eventObj *event.RequestReceived) {
+func (g *Validator) ValidateBodySize(eventObj *webEvent.RequestReceived) {
 	checkError := checkRequestBody(eventObj.GetResponseWriter(), eventObj.GetRequest())
 
 	if nil == checkError {
@@ -49,7 +49,7 @@ func newValidator() *Validator {
 	return &Validator{}
 }
 
-func Register(kernelObj *gkernel.Kernel) {
+func Register(kernelObj *webKernel.Kernel) {
 	err := kernelObj.RegisterService(MiddlewareServiceAlias, newValidator, true)
 	if nil != err {
 		panic(fmt.Sprintf("failed to register %s service, error: %s", MiddlewareServiceAlias, err.Error()))

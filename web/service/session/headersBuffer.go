@@ -14,7 +14,7 @@ func (w headersBuffer) Write(b []byte) (int, error) {
 	return len(b), nil
 }
 
-func (w headersBuffer) WriteHeader(statusCode int) {}
+func (w headersBuffer) WriteHeader(_ int) {}
 
 func newHeadersBuffer() *headersBuffer {
 	return &headersBuffer{

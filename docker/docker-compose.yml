@@ -24,7 +24,7 @@ services:
 
   redis:
     image: redis:5.0-alpine
-    container_name: microsites-go-redis
+    container_name: gkernel-skeleton-redis
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - ./volumes/redis:/data

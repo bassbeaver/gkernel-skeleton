@@ -3,15 +3,17 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/bassbeaver/gkernel"
-	kernelResponse "github.com/bassbeaver/gkernel/response"
-	"gkernel-skeleton/controller"
-	authService "gkernel-skeleton/service/auth"
-	csrfService "gkernel-skeleton/service/csrf"
-	requestLoggerService "gkernel-skeleton/service/request_logger"
-	requestSizeValidatorService "gkernel-skeleton/service/request_size_validator"
-	sessionService "gkernel-skeleton/service/session"
-	userProvider "gkernel-skeleton/service/user_provider"
+	webKernel "github.com/bassbeaver/gkernel/web"
+	kernelResponse "github.com/bassbeaver/gkernel/web/response"
+	loggerFactoryService "gkernel-skeleton/common/service/logger_factory"
+	redisService "gkernel-skeleton/common/service/redis"
+	webController "gkernel-skeleton/web/controller"
+	authService "gkernel-skeleton/web/service/auth"
+	csrfService "gkernel-skeleton/web/service/csrf"
+	requestLoggerService "gkernel-skeleton/web/service/request_logger"
+	requestSizeValidatorService "gkernel-skeleton/web/service/request_size_validator"
+	sessionService "gkernel-skeleton/web/service/session"
+	userProvider "gkernel-skeleton/web/service/user_provider"
 	"html/template"
 	"net/http"
 	"net/http/pprof"
@@ -40,7 +42,7 @@ func main() {
 		configPath = *configPathFlag
 	}
 
-	kernelObj, kernelError := gkernel.NewKernel(configPath)
+	kernelObj, kernelError := webKernel.NewKernel(configPath)
 	if nil != kernelError {
 		panic(kernelError)
 	}
@@ -48,25 +50,16 @@ func main() {
 	//******************************** Service's registration ********************************
 
 	// ---- Controllers
-	var controllerRegError error
+	webController.RegisterIndex(kernelObj)
 
-	controllerRegError = kernelObj.RegisterService(
-		"IndexController",
-		func() *controller.IndexController {
-			return &controller.IndexController{}
-		},
-		true,
-	)
-	if nil != controllerRegError {
-		panic(fmt.Sprintf("failed to register IndexController service, error: %s", controllerRegError.Error()))
-	}
-
-	// ---- Services from packages
+	// ---- Other services
 	authService.Register(kernelObj)
 	userProvider.Register(kernelObj)
 	csrfService.Register(kernelObj)
+	loggerFactoryService.Register(kernelObj)
 	requestSizeValidatorService.Register(kernelObj)
 	requestLoggerService.Register(kernelObj)
+	redisService.Register(kernelObj)
 	sessionService.Register(kernelObj)
 
 	//******************************** Custom templates functions registration ********************************
@@ -90,7 +83,7 @@ func main() {
 	//************** Profiler (pprof) configuration **************
 	if *profilingFlag {
 		registerPprofRoute := func(name, url string, handlerFunc http.HandlerFunc) {
-			kernelObj.RegisterRoute(&gkernel.Route{
+			kernelObj.RegisterRoute(&webKernel.Route{
 				Name:    name,
 				Url:     url,
 				Methods: []string{http.MethodGet},
