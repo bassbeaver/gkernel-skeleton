@@ -50,7 +50,7 @@ func (g *Guard) Check(eventObj *event.RequestReceived) {
 
 	formError := request.ParseForm()
 	if nil != formError {
-		errorResponse := response.NewViewResponse("error/bad_request.gohtml")
+		errorResponse := response.NewViewResponse("error/bad-request.gohtml")
 		errorResponse.SetHttpStatus(http.StatusBadRequest)
 		errorResponse.SetData(map[string]string{
 			"ErrorCode": strconv.Itoa(http.StatusBadRequest),
@@ -64,7 +64,7 @@ func (g *Guard) Check(eventObj *event.RequestReceived) {
 	formToken := request.PostFormValue(formInputName)
 	sessionToken := GetTokenFromRequestContext(request)
 	if formToken != sessionToken {
-		errorResponse := response.NewViewResponse("error/bad_request.gohtml")
+		errorResponse := response.NewViewResponse("error/bad-request.gohtml")
 		errorResponse.SetHttpStatus(http.StatusBadRequest)
 		errorResponse.SetData(map[string]string{
 			"ErrorCode": strconv.Itoa(http.StatusBadRequest),

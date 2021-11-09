@@ -25,7 +25,7 @@ func (g *Validator) ValidateBodySize(eventObj *webEvent.RequestReceived) {
 		return
 	}
 
-	errorResponse := response.NewViewResponse("error/bad_request.gohtml")
+	errorResponse := response.NewViewResponse("error/bad-request.gohtml")
 
 	switch checkError.(type) {
 	case *requestEntityToLarge:

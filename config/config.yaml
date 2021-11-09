@@ -24,6 +24,9 @@ services:
   SessionsMiddleware:
     arguments: ["sid", "@RedisConnection"]
 
+  TimeoutHandler:
+    arguments: []
+
   UserProvider:
     arguments: []
 
@@ -39,6 +42,10 @@ web:
   http_port: 8081
   templates_path: "web/templates"
   shutdown_timeout: 5000
+  server_read_header_timeout: 2500
+  server_read_timeout: 7500
+  server_write_timeout: 15000
+  server_idle_timeout: 7500
 
   routing:
 
@@ -75,6 +82,9 @@ web:
         event_listeners:
           - {event: kernelEvent.RequestReceived, listener: "AuthService:RedirectIfAuthenticated", priority: 41}
           - {event: kernelEvent.RequestReceived, listener: "AuthService:AuthenticateByLogPass", priority: 42}
+        timeout:
+          duration: 10000
+          handler: "TimeoutHandler:PerformLoginHandleTimeout"
 
       IndexController:performLogout:
         url: "/logout"
@@ -93,6 +103,10 @@ web:
       - {event: kernelEvent.RequestReceived, listener: "AuthService:AuthenticateBySession", priority: 40}
       - {event: kernelEvent.ResponseBeforeSend, listener: "SessionsMiddleware:RequestSessionAddResponseHeader", priority: 20}
       - {event: kernelEvent.RequestTermination, listener: "RequestLoggerSetter:CloseLogger", priority: 100}
+
+    timeout:
+      duration: 8000
+      handler: "TimeoutHandler:HandleTimeout"
 
 cli:
 

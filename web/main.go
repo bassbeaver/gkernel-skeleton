@@ -13,6 +13,7 @@ import (
 	requestLoggerService "gkernel-skeleton/web/service/request_logger"
 	requestSizeValidatorService "gkernel-skeleton/web/service/request_size_validator"
 	sessionService "gkernel-skeleton/web/service/session"
+	timeoutHandler "gkernel-skeleton/web/service/timeout_handler"
 	userProvider "gkernel-skeleton/web/service/user_provider"
 	"html/template"
 	"net/http"
@@ -61,6 +62,7 @@ func main() {
 	requestLoggerService.Register(kernelObj)
 	redisService.Register(kernelObj)
 	sessionService.Register(kernelObj)
+	timeoutHandler.Register(kernelObj)
 
 	//******************************** Custom templates functions registration ********************************
 	kernelObj.GetTemplates().Funcs(template.FuncMap{
